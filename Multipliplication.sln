@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Multipliplication", "Multipliplication\Multipliplication.pyproj", "{B3C687E9-933C-464C-A294-86EEEE9FDA91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3C687E9-933C-464C-A294-86EEEE9FDA91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C687E9-933C-464C-A294-86EEEE9FDA91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8E4E136E-4EB9-45E7-951E-ABB25092BDC7}
+	EndGlobalSection
+EndGlobal
