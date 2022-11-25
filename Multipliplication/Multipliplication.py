@@ -1,3 +1,4 @@
+
 import math
 
 N1 = 0
@@ -19,57 +20,86 @@ def SumListNum(a, b):
         answ.insert(0,digit)
     return answ
 
+def DifListNum(a, b):
+    #global N1
+
+    answ = []
+    numDif = 0
+    for i in range(len(b)):
+        #N1 += 1
+        numDif = a[len(a) - i - 1] - b[len(b) - i - 1]
+        if(numDif<0):
+            numDif+=10
+            a[len(a) - i - 2]-=1
+        answ.insert(0,numDif)
+
+    answ = a[:-len(b)] + answ
+    while(len(answ)>0 and answ[0] == 0):
+        answ.pop(0)
+    return answ
+
+def SpecialSum(a, b):
+    global N1
+    if len(a)>len(b): b.insert(0,0)
+    elif len(b)>len(a): a.insert(0,0)
+    fl = [a[0]*b[0]]
+    fl.extend([0]*2*(len(a)-1))
+    summ = []
+    if(a[0] == 0 or b[0] == 0):
+        if a[0] == 0: summ = a[1:]
+        else: summ = b[1:]
+    else: 
+        #N1 += 1
+        summ = SumListNum(b[1:], a[1:])
+    summ.extend([0]*(len(a)-1))
+    ab = RecMult(b[1:], a[1:])
+    answ=[]
+    if(fl[0]!=0):
+        answ = SumListNum(fl, summ)
+        answ = SumListNum(answ, ab)
+    else: answ = answ = SumListNum(summ, ab)
+    return answ
+
 def RecMult(a,b):
+    global N1
     if len(a) == 1:
+        N1 += 1
         ml = a[0]*b[0]
         answ = [ml%10]
         if int(math.floor(ml/10)) != 0:
             answ.insert(0,int(math.floor(ml/10)))
         return answ
-    if len(a) % 2 == 1:
-        a.insert(0)
-        b.insert(0)
-    halfLen = int(len(a)/2)
-    mult1 = RecMult(a[:halfLen], b[:halfLen])
-    mult2 = RecMult(a[:halfLen], b[halfLen:])
-    mult3 = RecMult(a[halfLen:], b[:halfLen])
-    mult4 = RecMult(a[halfLen:], b[halfLen:])
-    answ = mult1+SumListNum(mult2,mult3)+mult4
+
+    halfLen = int(math.ceil(len(a)/2))
+    #N1+=1
+    v = RecMult(a[:-halfLen], b[:-halfLen])
+    w = RecMult(a[-halfLen:], b[-halfLen:])
+    sumAB = SumListNum(a[:-halfLen],a[-halfLen:])
+    sumCD = SumListNum(b[:-halfLen],b[-halfLen:])
+    if(len(sumAB)>halfLen or len(sumCD)>halfLen):
+         u = SpecialSum(sumAB,sumCD)
+    else: u = RecMult(sumAB, sumCD)
+    
+    #u = RecMult(sumAB, sumCD)
+    
+    #N1+=2
+    u = DifListNum(u,v)
+    u = DifListNum(u,w)
+    u.extend([0]*halfLen)
+    v.extend([0]*2*halfLen)
+    answ = SumListNum(u,v)
+    answ = SumListNum(answ,w)
     return answ
 
-def RecMultFast(a,b,n):
-    if n == 1:
-        return a & b
-    if n % 2 == 1: n+=1
-    mask = ~(((~0)>>n)<<n)
-    halfLen = int(n/2)
-    a1 = a >> halfLen
-    a2 = ((a << halfLen) & mask)>>halfLen
-    b1 = b >> halfLen
-    b2 = ((b << halfLen) & mask)>>halfLen
-    mult1 = RecMultFast(a1,b1,halfLen)
-    mult4 = RecMultFast(a2,b2,halfLen)
-    dopmult = 0
-    sumA = a1 + a2
-    sumB = b1 + b2
-    maxN = 1
-    if sumA != 0 or sumB != 0:
-        maxN = max(math.ceil(math.log2(sumA+0.1)), math.ceil(math.log2(sumB+0.1)))
-    dopmult = RecMultFast(sumA,sumB,maxN)
-    return (mult1<<n) + ((dopmult - mult1 - mult4)<<halfLen) + mult4
 
 def mult(a, b, isFast = False):
-    #if (a == 0) or (b == 0): return 0
     digitCount = max(len(a), len(b))
     for i in range(digitCount - len(a)):
         b.insert(0,0)
     for i in range(digitCount - len(b)):
         a.insert(0,0)
-    #if digitCount % 2 == 1: digitCount+=1
-    if isFast:
-        return RecMultFast(a, b, digitCount)
-    else:
-        return RecMult(a, b)
+
+    return RecMult(a, b)
 
 
 def ColumnMult(a, b):
@@ -116,5 +146,7 @@ def GetNumbers():
 #print(mult([9,8], [9,8]))
 #print(mult(43, 2512, True))
 num1, num2 = GetNumbers()
-print(ColumnMult(num1, num2))
+print(mult(num1, num2))
+#print(mult([2,3,4,5], [7,9,8,6]))
 print("N1: ",N1)
+#print(RecMult([9,9,9],[9,9,9]))
